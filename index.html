@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Phone Clinometer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Phone Clinometer</h1>
+            <p>Measure heights using your phone's tilt sensor</p>
+        </header>
+
+        <main>
+            <div class="input-section">
+                <label for="distance">Distance to target (feet):</label>
+                <input id="distance" type="number" placeholder="Enter distance" min="1" step="0.1">
+            </div>
+
+            <div class="angle-display">
+                <div id="live-angle">Tilt angle: --</div>
+            </div>
+
+            <div class="controls">
+                <button id="btn-base" class="primary-btn">Record Base Angle</button>
+                <button id="btn-top" class="primary-btn">Record Top Angle</button>
+            </div>
+
+            <div id="status" class="status-message"></div>
+            <div id="result" class="result-display">Height will appear here</div>
+        </main>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>

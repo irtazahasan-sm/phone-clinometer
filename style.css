@@ -1,0 +1,205 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    background: #000;
+    color: #fff;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* High contrast for outdoor readability */
+.container {
+    max-width: 100%;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    font-size: 2.2rem;
+    color: #00ff00;
+    text-shadow: 0 0 10px #00ff00;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 1.1rem;
+    color: #ccc;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* Input section */
+.input-section {
+    background: #1a1a1a;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #333;
+}
+
+.input-section label {
+    display: block;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #00ff00;
+}
+
+.input-section input {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.3rem;
+    background: #000;
+    color: #fff;
+    border: 2px solid #00ff00;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.input-section input:focus {
+    outline: none;
+    box-shadow: 0 0 15px #00ff00;
+}
+
+/* Live angle display */
+.angle-display {
+    background: #1a1a1a;
+    padding: 30px;
+    border-radius: 10px;
+    border: 2px solid #333;
+    text-align: center;
+}
+
+#live-angle {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #00ffff;
+    text-shadow: 0 0 10px #00ffff;
+    font-family: 'Courier New', monospace;
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.primary-btn {
+    background: #ff6600;
+    color: #fff;
+    border: none;
+    padding: 20px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid #ff6600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.primary-btn:hover {
+    background: #ff8800;
+    border-color: #ff8800;
+    box-shadow: 0 0 20px rgba(255, 102, 0, 0.5);
+}
+
+.primary-btn:active {
+    transform: scale(0.98);
+}
+
+.primary-btn:disabled {
+    background: #666;
+    border-color: #666;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* Status and result displays */
+.status-message {
+    background: #1a1a1a;
+    padding: 15px;
+    border-radius: 8px;
+    border: 2px solid #333;
+    text-align: center;
+    font-size: 1.1rem;
+    color: #ffff00;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.result-display {
+    background: #0d5016;
+    padding: 25px;
+    border-radius: 10px;
+    border: 2px solid #00ff00;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #00ff00;
+    text-shadow: 0 0 10px #00ff00;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Responsive design for larger screens */
+@media (min-width: 768px) {
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+    
+    .controls {
+        flex-direction: row;
+    }
+    
+    .primary-btn {
+        flex: 1;
+    }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    body {
+        background: #000;
+    }
+    
+    .primary-btn {
+        border-width: 3px;
+    }
+    
+    .input-section input {
+        border-width: 3px;
+    }
+}
