@@ -14,22 +14,57 @@
         </header>
 
         <main>
-            <div class="input-section">
-                <label for="distance">Distance to target (feet):</label>
-                <input id="distance" type="number" placeholder="Enter distance" min="1" step="0.1">
+            <div id="completed-steps" class="completed-steps"></div>
+
+            <div id="step-indicator" class="step-indicator">Step 1 of 3</div>
+
+            <!-- Shared viewfinder (shown during steps 2 and 3) -->
+            <div id="viewfinder" class="viewfinder hidden">
+                <video id="camera" autoplay playsinline></video>
+                <div class="crosshair">
+                    <div class="crosshair-h"></div>
+                    <div class="crosshair-v"></div>
+                    <div class="crosshair-dot"></div>
+                </div>
+                <div id="live-angle" class="angle-overlay">Tilt angle: --</div>
             </div>
 
-            <div class="angle-display">
-                <div id="live-angle">Tilt angle: --</div>
+            <div id="angle-fallback" class="angle-display hidden">
+                <div id="live-angle-fallback">Tilt angle: --</div>
             </div>
 
-            <div class="controls">
+            <!-- Step 1: Distance and height -->
+            <section id="step-1" class="step active">
+                <div class="input-section">
+                    <label for="distance">Distance to target (feet):</label>
+                    <input id="distance" type="number" placeholder="Enter distance" min="1" step="0.1">
+                </div>
+                <div class="input-section">
+                    <label for="user-height">Your height (feet):</label>
+                    <input id="user-height" type="number" placeholder="e.g. 5.8" min="1" max="8" step="0.1">
+                </div>
+                <button id="btn-next-1" class="primary-btn">Next</button>
+            </section>
+
+            <!-- Step 2: Base angle -->
+            <section id="step-2" class="step">
+                <p class="step-instruction">Aim the crosshair at the base of the object.</p>
                 <button id="btn-base" class="primary-btn">Record Base Angle</button>
+            </section>
+
+            <!-- Step 3: Top angle -->
+            <section id="step-3" class="step">
+                <p class="step-instruction">Now tilt up and aim at the top of the object.</p>
                 <button id="btn-top" class="primary-btn">Record Top Angle</button>
-            </div>
+            </section>
+
+            <!-- Result -->
+            <section id="step-result" class="step">
+                <div id="result" class="result-display"></div>
+                <button id="btn-measure-again" class="primary-btn">Measure Again</button>
+            </section>
 
             <div id="status" class="status-message"></div>
-            <div id="result" class="result-display">Height will appear here</div>
         </main>
     </div>
 
