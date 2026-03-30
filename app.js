@@ -2,7 +2,6 @@ import { calculateHeight } from './utils/math.js';
 
 // Application state
 let currentGamma = 0;
-let baseAngle = null;
 let topAngle = null;
 let isListening = false;
 let cameraStream = null;
@@ -11,7 +10,6 @@ let cameraStream = null;
 const elements = {
     liveAngle: document.getElementById('live-angle'),
     liveAngleFallback: document.getElementById('live-angle-fallback'),
-    btnBase: document.getElementById('btn-base'),
     btnTop: document.getElementById('btn-top'),
     btnNext1: document.getElementById('btn-next-1'),
     btnMeasureAgain: document.getElementById('btn-measure-again'),
@@ -26,16 +24,15 @@ const elements = {
     completedSteps: document.getElementById('completed-steps'),
     step1: document.getElementById('step-1'),
     step2: document.getElementById('step-2'),
-    step3: document.getElementById('step-3'),
     stepResult: document.getElementById('step-result'),
 };
 
 /**
- * Navigate to a step (1, 2, 3, or 'result')
+ * Navigate to a step (1, 2, or 'result')
  */
 function goToStep(step) {
     // Hide all step sections
-    for (const s of [elements.step1, elements.step2, elements.step3, elements.stepResult]) {
+    for (const s of [elements.step1, elements.step2, elements.stepResult]) {
         s.classList.remove('active');
     }
 
@@ -44,11 +41,11 @@ function goToStep(step) {
         elements.stepIndicator.classList.add('hidden');
     } else {
         elements.stepIndicator.classList.remove('hidden');
-        elements.stepIndicator.textContent = `Step ${step} of 3`;
+        elements.stepIndicator.textContent = `Step ${step} of 2`;
     }
 
-    // Show/hide viewfinder for angle-recording steps
-    if (step === 2 || step === 3) {
+    // Show/hide viewfinder for angle-recording step
+    if (step === 2) {
         if (cameraStream) {
             elements.viewfinder.classList.remove('hidden');
             elements.angleFallback.classList.add('hidden');
@@ -62,7 +59,7 @@ function goToStep(step) {
     }
 
     // Activate the target step
-    const stepEl = { 1: elements.step1, 2: elements.step2, 3: elements.step3, result: elements.stepResult }[step];
+    const stepEl = { 1: elements.step1, 2: elements.step2, result: elements.stepResult }[step];
     stepEl.classList.add('active');
 
     if (step === 1) {
@@ -154,7 +151,9 @@ function startListening() {
  * Handle device orientation changes
  */
 function handleOrientationChange(event) {
-    currentGamma = event.gamma || 0;
+    const beta = event.beta || 0;
+    // beta ≈ 90° when phone is upright; tilting back to aim up increases beta
+    currentGamma = beta - 90;
 
     const text = `Tilt angle: ${currentGamma.toFixed(1)}\u00B0`;
     elements.liveAngle.textContent = text;
@@ -190,14 +189,14 @@ async function requestPermission() {
  */
 function calculateAndDisplayHeight() {
     const distance = parseFloat(elements.distance.value);
-    if (!distance || distance <= 0 || baseAngle === null || topAngle === null) {
+    if (!distance || distance <= 0 || topAngle === null) {
         updateStatus('Missing data. Please restart the measurement.');
         return;
     }
 
     try {
         const eyeHeight = parseFloat(elements.userHeight.value) - 0.5;
-        const heightFt = calculateHeight(baseAngle, topAngle, distance, eyeHeight);
+        const heightFt = calculateHeight(topAngle, distance, eyeHeight);
         const heightM = heightFt * 0.3048;
         elements.result.textContent = `Height: ${heightFt.toFixed(1)} ft (${heightM.toFixed(1)} m)`;
         updateStatus('');
@@ -217,7 +216,6 @@ function updateStatus(message) {
  * Reset all state and go back to step 1
  */
 function resetMeasurements() {
-    baseAngle = null;
     topAngle = null;
     elements.distance.value = '';
     elements.result.textContent = '';
@@ -257,14 +255,12 @@ elements.btnNext1.addEventListener('click', async () => {
 
     addPill(1, 'Distance', `${distance} ft`, () => {
         clearPillsFrom(1);
-        baseAngle = null;
         topAngle = null;
         goToStep(1);
     });
 
     addPill(1, 'Your height', `${userHeight} ft`, () => {
         clearPillsFrom(1);
-        baseAngle = null;
         topAngle = null;
         goToStep(1);
     });
@@ -280,32 +276,15 @@ elements.distance.addEventListener('keypress', (event) => {
     }
 });
 
-// Step 2: Record base angle
-elements.btnBase.addEventListener('click', () => {
-    baseAngle = currentGamma;
-
-    addPill(2, 'Base angle', `${baseAngle.toFixed(1)}\u00B0`, async () => {
-        clearPillsFrom(2);
-        baseAngle = null;
-        topAngle = null;
-        await startCamera();
-        goToStep(2);
-        updateStatus('');
-    });
-
-    goToStep(3);
-    updateStatus('');
-});
-
-// Step 3: Record top angle
+// Step 2: Record top angle
 elements.btnTop.addEventListener('click', () => {
     topAngle = currentGamma;
 
-    addPill(3, 'Top angle', `${topAngle.toFixed(1)}\u00B0`, async () => {
-        clearPillsFrom(3);
+    addPill(2, 'Top angle', `${topAngle.toFixed(1)}\u00B0`, async () => {
+        clearPillsFrom(2);
         topAngle = null;
         await startCamera();
-        goToStep(3);
+        goToStep(2);
         updateStatus('');
     });
 
