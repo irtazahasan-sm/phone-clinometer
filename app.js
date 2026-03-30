@@ -195,7 +195,7 @@ function calculateAndDisplayHeight() {
     }
 
     try {
-        const eyeHeight = parseFloat(elements.userHeight.value) - 0.5;
+        const eyeHeight = parseFloat(elements.userHeight.value);
         const heightFt = calculateHeight(topAngle, distance, eyeHeight);
         const heightM = heightFt * 0.3048;
         elements.result.textContent = `Height: ${heightFt.toFixed(1)} ft (${heightM.toFixed(1)} m)`;
@@ -259,7 +259,7 @@ elements.btnNext1.addEventListener('click', async () => {
         goToStep(1);
     });
 
-    addPill(1, 'Your height', `${userHeight} ft`, () => {
+    addPill(1, 'Eye height', `${userHeight} ft`, () => {
         clearPillsFrom(1);
         topAngle = null;
         goToStep(1);
